@@ -1,16 +1,8 @@
 {
-  "name": "@tclayson/node-red-contrib-send-form",
+  "name": "@rbflurry/node-red-contrib-send-form",
   "version": "0.0.1",
   "description": "NodeRed node for posting multipart/form-data to http server",
   "main": "http-send-multipart-form.js",
-  "homepage": "https://github.com/tclayson/node-red-contrib-send-form#readme",
-  "author": {
-    "name": "tclayson",
-    "url": "https://github.com/tclayson"
-  },
-  "scripts": {},
-  "bugs": {
-    "url": "https://github.com/tclayson/node-red-contrib-send-form/issues"
   },
   "dependencies": {
     "file-type": ">=12.4.0",
@@ -33,6 +25,8 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/tclayson/node-red-contrib-send-form.git"
-  }
+    "url": "git+https://github.com/rbflurry/node-red-contrib-send-form"
+  },
+  "publishConfig": {
+    "access": "public"
 }

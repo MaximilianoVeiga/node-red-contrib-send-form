@@ -15,11 +15,6 @@ module.exports = function (RED) {
 		// Setup node
 		RED.nodes.createNode(this, n);
 		var node = this;
-		var nodeUrl = n.url;
-		
-        var isTemplatedUrl = (nodeUrl || "").indexOf("{{") != -1;
-		
-		var isTemplatedUrl = (nodeUrl || "").indexOf("{{") != -1;
 
 		this.ret = n.ret || "txt"; // default return type is text
 		if (RED.settings.httpRequestTimeout) {
@@ -27,6 +22,15 @@ module.exports = function (RED) {
 		} else {
 			this.reqTimeout = 60000;
 		}
+
+		// Load 'url' parameter from node and try msg as failover
+		var nodeUrl = n.url;
+		if(!nodeUrl) {
+			nodeUrl = msg.url;
+		}
+		var isTemplatedUrl = (nodeUrl || "").indexOf("{{") != -1;
+
+
 
 		// 1) Process inputs to Node
 		this.on("input", function (msg) {
