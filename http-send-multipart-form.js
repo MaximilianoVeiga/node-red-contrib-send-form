@@ -23,18 +23,16 @@ module.exports = function (RED) {
 			this.reqTimeout = 60000;
 		}
 
-		// Load 'url' parameter from node and try msg as failover
-		var nodeUrl = n.url;
-		if(!nodeUrl) {
-			nodeUrl = msg.url;
-		}
-		var isTemplatedUrl = (nodeUrl || "").indexOf("{{") != -1;
-
-
-
 		// 1) Process inputs to Node
 		this.on("input", function (msg) {
 			// TODO: add ability to select other input types (not just files)
+			
+			// Load 'url' parameter from node and try msg as failover
+			var nodeUrl = n.url;
+				if(!nodeUrl) {
+					nodeUrl = msg.url;
+				}
+				var isTemplatedUrl = (nodeUrl || "").indexOf("{{") != -1;
 			
 			if(msg.debug !== undefined) {
 				debug = msg.debug;
