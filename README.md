@@ -1,16 +1,16 @@
 # node-red-contrib-send-form
-This is a node-red node for posting http(s) requests containing files as multipart formData. Currently a work in progress.
+This is a node-red node for posting http(s) requests containing files as multipart formData.
 
 ## Installation
-run npm -g install node-red-contrib-send-form
+run npm -g install @rbflurry/node-red-contrib-send-form
 
 ## Features
 Pulled together using some of the best of parts of other node-red-contrib nodes (particularly node-red-contrib-http-request), and the best parts of stackoverflow.
-Currently only sends files. However, there are future plans to handle other types multipart/form-data.
+Currently only sends files. Also Allows setting the url in msg.url
 
 ## Usage
 Required node inputs:
-* url (this is specified on the node) 
+* url 
 * file source type:
   - base64 or binary buffer
 
@@ -67,11 +67,3 @@ same as:
     <input type=file name=file>
   </form>
 ```
-
-## Example flow
-Check Node-RED Menu Import -> Examples for available examples 
-
-## Why this module?
-As of december 2019, NodeRed does not yet support sending multipart form-data. This module aims to begin to close that gap.
-
-There is always room for improvement, and new ideas are valued. Feel free to submit pull requests to make this library even better.

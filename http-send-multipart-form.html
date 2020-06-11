@@ -159,8 +159,8 @@
 
 <script type="text/x-red" data-help-name="http-send-multipart-form-v2">
 	<p>Provides a node for posting multipart form-data.</p>
-	<p>The URL must be configured in the node.</p>
 	<h3>Inputs</h3>
+		<code>url</code>, if set, is used as the url of the request. Must start with <em>http:</em> or <em>https:</em>. If left blank, the node will load the info from the <code>msg</code> object at <code>msg.url</code>.
 		<code>payload</code> contains all form data properties:
 		<ul>
 			<li>
