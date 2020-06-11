@@ -1,5 +1,5 @@
 <script type="text/javascript">
-	RED.nodes.registerType('http-send-multipart-form', {
+	RED.nodes.registerType('http-send-multipart-form-v2', {
 		category: 'function',
 		color: "rgb(179, 211, 249)",
 		defaults: {
@@ -94,7 +94,7 @@
 	});
 </script>
 
-<script type="text/x-red" data-template-name="http-send-multipart-form">
+<script type="text/x-red" data-template-name="http-send-multipart-form-v2">
 	<div class="form-row">
 		<label for="node-input-name"><i class="fa fa-tag"></i> Name </label>
 		<input type="text" id="node-input-name" data-i18n="[placeholder]common.label.name">
@@ -157,7 +157,7 @@
     
 </script>
 
-<script type="text/x-red" data-help-name="http-send-multipart-form">
+<script type="text/x-red" data-help-name="http-send-multipart-form-v2">
 	<p>Provides a node for posting multipart form-data.</p>
 	<p>The URL must be configured in the node.</p>
 	<h3>Inputs</h3>
