@@ -1,6 +1,6 @@
 {
   "name": "@rbflurry/node-red-contrib-send-form",
-  "version": "0.0.4",
+  "version": "0.0.5",
   "description": "NodeRed node for posting multipart/form-data to http server",
   "main": "http-send-multipart-form.js",
   "dependencies": {
