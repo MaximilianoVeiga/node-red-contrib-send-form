@@ -3,7 +3,6 @@
   "version": "0.0.1",
   "description": "NodeRed node for posting multipart/form-data to http server",
   "main": "http-send-multipart-form.js",
-  },
   "dependencies": {
     "file-type": ">=12.4.0",
     "form-data": ">=3.0.0",
@@ -28,5 +27,5 @@
     "url": "git+https://github.com/rbflurry/node-red-contrib-send-form"
   },
   "publishConfig": {
-    "access": "public"
+    "access": "public" }
 }
