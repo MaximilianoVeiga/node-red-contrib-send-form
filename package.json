@@ -19,7 +19,7 @@
   "license": "MIT",
   "node-red": {
     "nodes": {
-      "http-send-multipart-form": "http-send-multipart-form.js"
+      "http-send-multipart-form-v2": "http-send-multipart-form.js"
     }
   },
   "repository": {
