@@ -253,7 +253,7 @@ module.exports = function (RED) {
 	} // end of httpSendMultipart fxn
 
 	// Register the Node
-	RED.nodes.registerType("http-send-multipart-form", httpSendMultipart, {
+	RED.nodes.registerType("http-send-multipart-form-v2", httpSendMultipart, {
 		credentials: {
 			user: {
 				type: "text"
