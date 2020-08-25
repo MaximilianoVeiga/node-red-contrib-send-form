@@ -138,11 +138,11 @@ module.exports = function (RED) {
 						buffer = msg.payload.file.data;
 				}
 				
-				var fileTypeInfo = FileType.fromBuffer(buffer);
+				var fileTypeInfo = await FileType.fromBuffer(buffer);
 				fileMime = fileTypeInfo.mime;
 				fileName += "."+fileTypeInfo.ext;
 
-				if(debug) console.log(FileType.fromBuffer(buffer));
+				if(debug) console.log(fileTypeInfo);
 				if(debug) console.log(url);
 
 				if(msg.payload.formOptions !== undefined) {
@@ -191,7 +191,7 @@ module.exports = function (RED) {
 						let body = []
 						res.on('data', (chunk) => {
 							if(debug) console.log(`BODY: ${chunk}`);
-							body.push(chunk)
+							body.push(chunk);
 						  });
 
 						  res.on('end', () => {
@@ -212,12 +212,12 @@ module.exports = function (RED) {
 								});
 							}
 
-							body = Buffer.concat(body)
+							body = Buffer.concat(body);
 
 							switch(n.ret) {
 								case 'bin': {
-									msg.payload = body
-									break
+									msg.payload = body;
+									break;
 								}
 								case 'obj': {
 
@@ -225,8 +225,8 @@ module.exports = function (RED) {
 									switch(res.headers["content-type"]) {
 										case 'application/json':
 										case 'application/json; charset=utf-8': {
-											body = JSON.parse(body)
-											break
+											body = JSON.parse(body);
+											break;
 										}
 									}
 
@@ -234,11 +234,11 @@ module.exports = function (RED) {
 										body: body,
 										headers: res.headers,
 										statusCode: res.statusCode
-									}
-									break
+									};
+									break;
 								}
 								default: {
-									msg.payload = body.toString()
+									msg.payload = body.toString();
 								}
 							}
 
