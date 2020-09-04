@@ -1,9 +1,10 @@
 // require in libs
-var mustache = require('mustache'),
-request = require('request'),
-formData = require('form-data'),
-fs = require('fs');
-const FileType = require('file-type');
+var mustache = require('mustache');
+var FileType = require('file-type');
+var bent = require('bent');
+var FormData = require('form-data');
+const {Stream} = require('stream');
+var request = require('request');
 // require in libs
 
 var fileData = ""; // initializing file
@@ -24,7 +25,7 @@ module.exports = function (RED) {
 		}
 
 		// 1) Process inputs to Node
-		this.on("input", function (msg) {
+		this.on("input", async function (msg) {
 			// TODO: add ability to select other input types (not just files)
 			
 			// Load 'url' parameter from node and try msg as failover
@@ -84,7 +85,7 @@ module.exports = function (RED) {
 					url = 'https://' + username + ':' + password + '@' + urlTail;
 				}
 
-				var FormData = require('form-data');
+				
 
 				var formData = new FormData();
 				var buffer, fileName = 'default', fileMime = 'unknown', fileDataType;
@@ -159,99 +160,134 @@ module.exports = function (RED) {
 
 				formData.append(formFileField, buffer, { 	// 'photo'
 					'contentType': fileMime, 				//'image/png',
-					'filename': fileName 					//'nb-3x256.png'
+					'filename': fileName
 				});
 
-
-//formData.append('chat_id', '457840189');
-//formData.append('caption', 'photo251');
-//formData.append('photo',    buffer, {'contentType': 'image/png', 'filename': 'nb-3x256.png'});
-				
-				formData.submit(url,
-					function (err, res) {
-
-					if (err || !res) {
-						// node.error(RED._("httpSendMultipart.errors.no-url"), msg);
-						var statusText = "Unexpected error";
-						if (err) {
-							statusText = err.message;
-						} else if (!resp) {
-							statusText = "No response object";
+				if(n.sendrequest) {
+					try {
+						var hearders = formData.getHeaders();
+						for(var name in msg.headers) {
+							hearders[name] = msg.headers[name];
 						}
+						if(debug) console.log(hearders);
+						switch(n.ret) {
+							case 'bin': {
+								var post = bent(url, 'POST', 'buffer', hearders);
+								var response = await post('', formData.getBuffer());
+								msg.payload = await response.buffer();
+								break;
+							}
+							case 'obj': {
+								var post = bent(url, 'POST', 'json', hearders);
+								var response = await post('', formData.getBuffer());
+								msg.payload = await response.json();
+								break;
+							}
+							default: {
+								var post = bent(url, 'POST', 'string', hearders);
+								var response = await post('', formData.getBuffer());
+								msg.payload = response;								
+								break;
+							}
+						}
+						node.status({});
+						node.send(msg);
+					} catch (error) {
 						node.status({
 							fill: "red",
 							shape: "ring",
-							text: statusText
+							text: error.message
 						});
-					// success
-					} else {
-						res.resume();
-
-						// get body of response object
-						let body = []
-						res.on('data', (chunk) => {
-							if(debug) console.log(`BODY: ${chunk}`);
-							body.push(chunk);
-						  });
-
-						  res.on('end', () => {
-							if(debug) console.log('No more data in response.');
-
-							if(debug) console.log("msg.statusCode "+res.statusCode);
-
-							if(res.statusCode !== 200){
-								if(debug) console.log("msg.statusCode "+res.statusCode);
-								node.status({
-									fill: "red",
-									shape: "ring",
-									text: (RED._("node-red-contrib-send-form.errors.error-status-code") + " ["+res.statusCode+"]")
-								});
-							} else {
-								if(debug) console.log("msg.statusCode "+res.statusCode);
-								node.status({
-								});
-							}
-
-							body = Buffer.concat(body);
-
-							switch(n.ret) {
-								case 'bin': {
-									msg.payload = body;
-									break;
-								}
-								case 'obj': {
-
-									// check content-type
-									switch(res.headers["content-type"]) {
-										case 'application/json':
-										case 'application/json; charset=utf-8': {
-											body = JSON.parse(body);
-											break;
-										}
-									}
-
-									msg.payload = {
-										body: body,
-										headers: res.headers,
-										statusCode: res.statusCode
-									};
-									break;
-								}
-								default: {
-									msg.payload = body.toString();
-								}
-							}
-
-							node.send(msg);
-						  });  						
+						console.log(error);
 					}
-				});
+					
+				} else {
+					formData.submit(url,
+						function (err, res) {
+	
+						if (err || !res) {
+							// node.error(RED._("httpSendMultipart.errors.no-url"), msg);
+							var statusText = "Unexpected error";
+							if (err) {
+								statusText = err.message;
+							} else if (!res) {
+								statusText = "No response object";
+							}
+							node.status({
+								fill: "red",
+								shape: "ring",
+								text: statusText
+							});
+						// success
+						} else {
+							res.resume();
+	
+							// get body of response object
+							let body = [];
+							res.on('data', (chunk) => {
+								if(debug) console.log(`BODY: ${chunk}`);
+								body.push(chunk);
+							  });
+	
+							  res.on('end', () => {
+								if(debug) console.log('No more data in response.');
+	
+								if(debug) console.log("msg.statusCode "+res.statusCode);
+	
+								if(res.statusCode !== 200){
+									if(debug) console.log("msg.statusCode "+res.statusCode);
+									node.status({
+										fill: "red",
+										shape: "ring",
+										text: (RED._("node-red-contrib-send-form.errors.error-status-code") + " ["+res.statusCode+"]")
+									});
+								} else {
+									if(debug) console.log("msg.statusCode "+res.statusCode);
+									node.status({
+									});
+								}
+	
+								body = Buffer.concat(body);
+	
+								switch(n.ret) {
+									case 'bin': {
+										msg.payload = body;
+										break;
+									}
+									case 'obj': {
+	
+										// check content-type
+										switch(res.headers["content-type"]) {
+											case 'application/json':
+											case 'application/json; charset=utf-8': {
+												body = JSON.parse(body);
+												break;
+											}
+										}
+	
+										msg.payload = {
+											body: body,
+											headers: res.headers,
+											statusCode: res.statusCode
+										};
+										break;
+									}
+									default: {
+										msg.payload = body.toString();
+									}
+								}
+								
+								node.send(msg);
+							  });  						
+						}
+					});
+				}
 			} //else
 		}); // end of on.input
 	} // end of httpSendMultipart fxn
 
 	// Register the Node
-	RED.nodes.registerType("http-send-multipart-form-v2", httpSendMultipart, {
+	RED.nodes.registerType("http-send-multipart-form-v3", httpSendMultipart, {
 		credentials: {
 			user: {
 				type: "text"

@@ -1,13 +1,14 @@
 {
-  "name": "@rbflurry/node-red-contrib-send-form",
-  "version": "0.0.6",
+  "name": "@dainer88/node-red-contrib-send-form",
+  "version": "0.0.38",
   "description": "NodeRed node for posting multipart/form-data to http server",
   "main": "http-send-multipart-form.js",
   "dependencies": {
-    "file-type": ">=12.4.0",
+    "xhr2": ">=0.2.0",
+    "bent": ">=7.3.10",
+    "file-type": ">=14.7.1",
     "form-data": ">=3.0.0",
-    "mustache": ">=2.3.0",
-    "request": ">=2.86.0"
+    "mustache": ">=2.3.0"
   },
   "deprecated": false,
   "keywords": [
@@ -19,13 +20,14 @@
   "license": "MIT",
   "node-red": {
     "nodes": {
-      "http-send-multipart-form-v2": "http-send-multipart-form.js"
+      "http-send-multipart-form-v3": "http-send-multipart-form.js"
     }
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/rbflurry/node-red-contrib-send-form"
+    "url": "git+https://github.com/dainer88/node-red-contrib-send-form"
   },
   "publishConfig": {
-    "access": "public" }
+    "access": "public"
+  }
 }

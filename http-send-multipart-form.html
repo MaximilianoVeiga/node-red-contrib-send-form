@@ -1,5 +1,5 @@
 <script type="text/javascript">
-	RED.nodes.registerType('http-send-multipart-form-v2', {
+	RED.nodes.registerType('http-send-multipart-form-v3', {
 		category: 'function',
 		color: "rgb(179, 211, 249)",
 		defaults: {
@@ -7,7 +7,7 @@
 				value: ""
 			},
 			filetype: {
-				value: ""
+				value: "",
 			},
 			formparts:{
 				value: ""
@@ -15,17 +15,15 @@
 			ret: {
 				value: "txt"
 			},
-/*			
-			filepath: {
-				value: ""
-			},
-*/			
 			url: {
 				value: ""
 			},
 			tls: {
 				type: "tls-config",
 				required: false
+			},
+			sendrequest: {
+				value: false
 			}
 		},
 		credentials: {
@@ -94,7 +92,7 @@
 	});
 </script>
 
-<script type="text/x-red" data-template-name="http-send-multipart-form-v2">
+<script type="text/x-red" data-template-name="http-send-multipart-form-v3">
 	<div class="form-row">
 		<label for="node-input-name"><i class="fa fa-tag"></i> Name </label>
 		<input type="text" id="node-input-name" data-i18n="[placeholder]common.label.name">
@@ -103,11 +101,6 @@
 		<label for="node-input-url"><i class="fa fa-globe"></i> url </label>
 		<input type="text" id="node-input-url" placeholder="http://">
 	</div>
-
-	<!--div class="form-row">
-		<label for="node-input-filepath"> Filepath </label>
-		<input type="text" id="node-input-filepath" placeholder="/path/to/file">
-	</div-->
 
 	<div class="form-row">
 		<label for="node-input-filetype"><i class="fa fa-arrow-left"></i><span> File source type</span></label>
@@ -121,6 +114,11 @@
     <div class="form-row">
 		<label for="node-input-formparts"> Form Parts </label>
 		<input type="text" id="node-input-formparts" placeholder="[{'chat_id': '324234234'},{'caption': 'Photo_343'}]">
+	</div>
+
+	<div class="form-row">
+		<input type="checkbox" id="node-input-sendrequest" style="display: inline-block; width: auto; vertical-align: top;">
+		<label for="node-input-sendrequest" style="width: auto">  Use request to send form data </label>
 	</div>
 
 	<div class="form-row">
@@ -157,7 +155,7 @@
     
 </script>
 
-<script type="text/x-red" data-help-name="http-send-multipart-form-v2">
+<script type="text/x-red" data-help-name="http-send-multipart-form-v3">
 	<p>Provides a node for posting multipart form-data.</p>
 	<h3>Inputs</h3>
 		<code>url</code>, if set, is used as the url of the request. Must start with <em>http:</em> or <em>https:</em>. If left blank, the node will load the info from the <code>msg</code> object at <code>msg.url</code>.
