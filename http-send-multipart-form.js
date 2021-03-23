@@ -140,8 +140,10 @@ module.exports = function (RED) {
 				}
 				
 				var fileTypeInfo = await FileType.fromBuffer(buffer);
-				fileMime = fileTypeInfo.mime;
-				fileName += "."+fileTypeInfo.ext;
+				fileMime = fileTypeInfo !== undifined ? fileTypeInfo.mime : 'application/octet-stream';
+				if(fileTypeInfo !== undifined) {
+					fileName += "."+fileTypeInfo.ext;
+				}
 
 				if(debug) console.log(fileTypeInfo);
 				if(debug) console.log(url);
