@@ -1,6 +1,6 @@
 {
   "name": "@dainer88/node-red-contrib-send-form",
-  "version": "0.0.39",
+  "version": "0.0.40",
   "description": "NodeRed node for posting multipart/form-data to http server",
   "main": "http-send-multipart-form.js",
   "dependencies": {
