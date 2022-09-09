@@ -1,6 +1,6 @@
 {
   "name": "@maximilianoveiga/node-red-contrib-send-form",
-  "version": "0.0.41",
+  "version": "0.0.42",
   "description": "NodeRed node for posting multipart/form-data to http server",
   "main": "http-send-multipart-form.js",
   "dependencies": {
@@ -25,9 +25,22 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/maximilianoveiga/node-red-contrib-send-form"
+    "url": "git+https://github.com/maximilianoveiga/node-red-contrib-send-form.git"
   },
   "publishConfig": {
     "access": "public"
-  }
+  },
+  "bugs": {
+    "url": "https://github.com/maximilianoveiga/node-red-contrib-send-form/issues"
+  },
+  "homepage": "https://github.com/maximilianoveiga/node-red-contrib-send-form#readme",
+  "directories": {
+    "example": "examples",
+    "test": "test"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Maximiliano Veiga"
 }
