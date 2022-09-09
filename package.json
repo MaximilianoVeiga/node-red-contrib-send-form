@@ -1,5 +1,5 @@
 {
-  "name": "@maximilianoveiga/node-red-contrib-send-form",
+  "name": "node-red-contrib-send-form-v4",
   "version": "0.0.42",
   "description": "NodeRed node for posting multipart/form-data to http server",
   "main": "http-send-multipart-form.js",
@@ -39,8 +39,6 @@
     "test": "test"
   },
   "devDependencies": {},
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
-  },
+  "scripts": {},
   "author": "Maximiliano Veiga"
 }
