@@ -1,208 +1,204 @@
 <script type="text/javascript">
-	RED.nodes.registerType('http-send-multipart-form-v3', {
-		category: 'function',
-		color: "rgb(179, 211, 249)",
-		defaults: {
-			name: {
-				value: ""
-			},
-			filetype: {
-				value: "",
-			},
-			formparts:{
-				value: ""
-			},
-			ret: {
-				value: "txt"
-			},
-			url: {
-				value: ""
-			},
-			tls: {
-				type: "tls-config",
-				required: false
-			},
-			sendrequest: {
-				value: false
-			}
-		},
-		credentials: {
-			user: {
-				type: "text"
-			},
-			password: {
-				type: "password"
-			}
-		},
-		inputs: 1,
-		outputs: 1,
-		icon: "white-globe.png",
-		label: function() {
-			return this.name || "send form mpart";
-		},
-		labelStyle: function() {
-			return this.name ? "node_label_italic" : "";
-		},
-		oneditprepare: function() {
-			$("#node-input-useAuth").change(function() {
-				if ($(this).is(":checked")) {
-					$(".node-input-useAuth-row").show();
-				} else {
-					$(".node-input-useAuth-row").hide();
-					$('#node-input-user').val('');
-					$('#node-input-password').val('');
-				}
-			});
-			if (this.credentials.user || this.credentials.has_password) {
-				$('#node-input-useAuth').prop('checked', true);
-			} else {
-				$('#node-input-useAuth').prop('checked', false);
-			}
-			$("#node-input-useAuth").change();
+  RED.nodes.registerType("http-send-multipart-form-v4", {
+    category: "function",
+    color: "rgb(179, 211, 249)",
+    defaults: {
+      name: {
+        value: "",
+      },
+      filetype: {
+        value: "",
+      },
+      formparts: {
+        value: "",
+      },
+      ret: {
+        value: "txt",
+      },
+      url: {
+        value: "",
+      },
+      tls: {
+        type: "tls-config",
+        required: false,
+      },
+      sendrequest: {
+        value: false,
+      },
+    },
+    credentials: {
+      user: {
+        type: "text",
+      },
+      password: {
+        type: "password",
+      },
+    },
+    inputs: 1,
+    outputs: 1,
+    icon: "white-globe.png",
+    label: function () {
+      return this.name || "send form mpart";
+    },
+    labelStyle: function () {
+      return this.name ? "node_label_italic" : "";
+    },
+    oneditprepare: function () {
+      $("#node-input-useAuth").change(function () {
+        if ($(this).is(":checked")) {
+          $(".node-input-useAuth-row").show();
+        } else {
+          $(".node-input-useAuth-row").hide();
+          $("#node-input-user").val("");
+          $("#node-input-password").val("");
+        }
+      });
+      if (this.credentials.user || this.credentials.has_password) {
+        $("#node-input-useAuth").prop("checked", true);
+      } else {
+        $("#node-input-useAuth").prop("checked", false);
+      }
+      $("#node-input-useAuth").change();
 
-			function updateTLSOptions() {
-				if ($("#node-input-usetls").is(':checked')) {
-					$("#node-row-tls").show();
-				} else {
-					$("#node-row-tls").hide();
-				}
-			}
-			if (this.tls) {
-				$('#node-input-usetls').prop('checked', true);
-			} else {
-				$('#node-input-usetls').prop('checked', false);
-			}
-			updateTLSOptions();
-			$("#node-input-usetls").on("click", function() {
-				updateTLSOptions();
-			});
-			$("#node-input-ret").change(function() {
-				if ($("#node-input-ret").val() === "obj") {
-					$("#tip-json").show();
-				} else {
-					$("#tip-json").hide();
-				}
-			});
-		},
-		oneditsave: function() {
-			if (!$("#node-input-usetls").is(':checked')) {
-				$("#node-input-tls").val("_ADD_");
-			}
-		}
-	});
+      function updateTLSOptions() {
+        if ($("#node-input-usetls").is(":checked")) {
+          $("#node-row-tls").show();
+        } else {
+          $("#node-row-tls").hide();
+        }
+      }
+      if (this.tls) {
+        $("#node-input-usetls").prop("checked", true);
+      } else {
+        $("#node-input-usetls").prop("checked", false);
+      }
+      updateTLSOptions();
+      $("#node-input-usetls").on("click", function () {
+        updateTLSOptions();
+      });
+      $("#node-input-ret").change(function () {
+        if ($("#node-input-ret").val() === "obj") {
+          $("#tip-json").show();
+        } else {
+          $("#tip-json").hide();
+        }
+      });
+    },
+    oneditsave: function () {
+      if (!$("#node-input-usetls").is(":checked")) {
+        $("#node-input-tls").val("_ADD_");
+      }
+    },
+  });
 </script>
 
 <script type="text/x-red" data-template-name="http-send-multipart-form-v3">
-	<div class="form-row">
-		<label for="node-input-name"><i class="fa fa-tag"></i> Name </label>
-		<input type="text" id="node-input-name" data-i18n="[placeholder]common.label.name">
-	</div>
-	<div class="form-row">
-		<label for="node-input-url"><i class="fa fa-globe"></i> url </label>
-		<input type="text" id="node-input-url" placeholder="http://">
-	</div>
+  <div class="form-row">
+  	<label for="node-input-name"><i class="fa fa-tag"></i> Name </label>
+  	<input type="text" id="node-input-name" data-i18n="[placeholder]common.label.name">
+  </div>
+  <div class="form-row">
+  	<label for="node-input-url"><i class="fa fa-globe"></i> url </label>
+  	<input type="text" id="node-input-url" placeholder="http://">
+  </div>
 
-	<div class="form-row">
-		<label for="node-input-filetype"><i class="fa fa-arrow-left"></i><span> File source type</span></label>
-		<select type="text" id="node-input-filetype" style="width:70%;">
-        <option selected value="empty"></option>
-        <option value="base64">Base64</option>
-        <option value="binary">Binary</option>
-        </select>
-	</div>
+  <div class="form-row">
+  	<label for="node-input-filetype"><i class="fa fa-arrow-left"></i><span> File source type</span></label>
+  	<select type="text" id="node-input-filetype" style="width:70%;">
+         <option selected value="empty"></option>
+         <option value="base64">Base64</option>
+         <option value="binary">Binary</option>
+         </select>
+  </div>
 
-    <div class="form-row">
-		<label for="node-input-formparts"> Form Parts </label>
-		<input type="text" id="node-input-formparts" placeholder="[{'chat_id': '324234234'},{'caption': 'Photo_343'}]">
-	</div>
+     <div class="form-row">
+  	<label for="node-input-formparts"> Form Parts </label>
+  	<input type="text" id="node-input-formparts" placeholder="[{'chat_id': '324234234'},{'caption': 'Photo_343'}]">
+  </div>
 
-	<div class="form-row">
-		<input type="checkbox" id="node-input-sendrequest" style="display: inline-block; width: auto; vertical-align: top;">
-		<label for="node-input-sendrequest" style="width: auto">  Use request to send form data </label>
-	</div>
+  <div class="form-row">
+  	<input type="checkbox" id="node-input-sendrequest" style="display: inline-block; width: auto; vertical-align: top;">
+  	<label for="node-input-sendrequest" style="width: auto">  Use request to send form data </label>
+  </div>
 
-	<div class="form-row">
-		<input type="checkbox" id="node-input-usetls" style="display: inline-block; width: auto; vertical-align: top;">
-		<label for="node-input-usetls" style="width: auto">  Enable secure (SSL/TLS) connection </label>
-		<div id="node-row-tls" class="hide">
-			<label style="width: auto; margin-left: 20px; margin-right: 10px;" for="node-input-tls"></label> Enable secure (SSL/TLS) connection <input type="text" style="width: 300px" id="node-input-tls">
-		</div>
-	</div>
+  <div class="form-row">
+  	<input type="checkbox" id="node-input-usetls" style="display: inline-block; width: auto; vertical-align: top;">
+  	<label for="node-input-usetls" style="width: auto">  Enable secure (SSL/TLS) connection </label>
+  	<div id="node-row-tls" class="hide">
+  		<label style="width: auto; margin-left: 20px; margin-right: 10px;" for="node-input-tls"></label> Enable secure (SSL/TLS) connection <input type="text" style="width: 300px" id="node-input-tls">
+  	</div>
+  </div>
 
-	<div class="form-row">
-		<input type="checkbox" id="node-input-useAuth" style="display: inline-block; width: auto; vertical-align: top;">
-		<label for="node-input-useAuth" style="width: 70%;"><span data-i18n="httpSendMultipart.basicauth"></span> Use basic authentication </label>
-		<div style="margin-left: 20px" class="node-input-useAuth-row hide">
-			<div class="form-row">
-				<label for="node-input-user"><i class="fa fa-user"></i> <span data-i18n="common.label.username"></span> Username </label>
-				<input type="text" id="node-input-user">
-			</div>
-			<div class="form-row">
-				<label for="node-input-password"><i class="fa fa-lock"></i> <span>Password</span></label>
-				<input type="password" id="node-input-password">
-			</div>
-		</div>
-	</div>
+  <div class="form-row">
+  	<input type="checkbox" id="node-input-useAuth" style="display: inline-block; width: auto; vertical-align: top;">
+  	<label for="node-input-useAuth" style="width: 70%;"><span data-i18n="httpSendMultipart.basicauth"></span> Use basic authentication </label>
+  	<div style="margin-left: 20px" class="node-input-useAuth-row hide">
+  		<div class="form-row">
+  			<label for="node-input-user"><i class="fa fa-user"></i> <span data-i18n="common.label.username"></span> Username </label>
+  			<input type="text" id="node-input-user">
+  		</div>
+  		<div class="form-row">
+  			<label for="node-input-password"><i class="fa fa-lock"></i> <span>Password</span></label>
+  			<input type="password" id="node-input-password">
+  		</div>
+  	</div>
+  </div>
 
-	<div class="form-row">
-		<label for="node-input-ret"><i class="fa fa-arrow-left"></i><span> Return</span></label>
-		<select type="text" id="node-input-ret" style="width:70%;">
-        <option value="txt">a String</option>
-        <option value="bin">a Buffer</option>
-        <option selected value="obj">a parsed JSON object</option>
-        </select>
-	</div>
-    
+  <div class="form-row">
+  	<label for="node-input-ret"><i class="fa fa-arrow-left"></i><span> Return</span></label>
+  	<select type="text" id="node-input-ret" style="width:70%;">
+         <option value="txt">a String</option>
+         <option value="bin">a Buffer</option>
+         <option selected value="obj">a parsed JSON object</option>
+         </select>
+  </div>
 </script>
 
 <script type="text/x-red" data-help-name="http-send-multipart-form-v3">
-	<p>Provides a node for posting multipart form-data.</p>
-	<h3>Inputs</h3>
-		<code>url</code>, if set, is used as the url of the request. Must start with <em>http:</em> or <em>https:</em>. If left blank, the node will load the info from the <code>msg</code> object at <code>msg.url</code>.
-		<code>payload</code> contains all form data properties:
-		<ul>
-			<li>
-				<code>file</code>
-				<ul>
-					<li><code>field</code></li>
-					<li><code>data</code></li>
-					<li><code>type</code></li>
-					<li><code>name</code></li>
-				</ul>
-			</li>
-			<li>
-				<code>formOptions</code>
-				<ul>
-					<li><code>&lt;name1&gt; : &lt;value&gt;</code></li>
-					<li><code>&lt;name2&gt; : &lt;value&gt;</code></li>
-				</ul>				
-			</li>
-		</ul>
-	<h3>Outputs</h3>
-	<dl class="message-properties">
+  <p>Provides a node for posting multipart form-data.</p>
+  <h3>Inputs</h3>
+  	<code>url</code>, if set, is used as the url of the request. Must start with <em>http:</em> or <em>https:</em>. If left blank, the node will load the info from the <code>msg</code> object at <code>msg.url</code>.
+  	<code>payload</code> contains all form data properties:
+  	<ul>
+  		<li>
+  			<code>file</code>
+  			<ul>
+  				<li><code>field</code></li>
+  				<li><code>data</code></li>
+  				<li><code>type</code></li>
+  				<li><code>name</code></li>
+  			</ul>
+  		</li>
+  		<li>
+  			<code>formOptions</code>
+  			<ul>
+  				<li><code>&lt;name1&gt; : &lt;value&gt;</code></li>
+  				<li><code>&lt;name2&gt; : &lt;value&gt;</code></li>
+  			</ul>
+  		</li>
+  	</ul>
+  <h3>Outputs</h3>
+  <dl class="message-properties">
 
-		<dt>payload
-			<span class="property-type">string | buffer | object</span>
-		</dt>
-		<dd> the payload of the message</dd>
+  	<dt>payload
+  		<span class="property-type">string | buffer | object</span>
+  	</dt>
+  	<dd> the payload of the message</dd>
 
-		<dt class="optional">payload.body
-			<span class="property-type">string</span>
-		</dt>
-		<dd>response body</dd>
-		<dt class="optional">payload.headers
-			<span class="property-type">object</span>
-		</dt>
-		<dd>response headers</dd>
+  	<dt class="optional">payload.body
+  		<span class="property-type">string</span>
+  	</dt>
+  	<dd>response body</dd>
+  	<dt class="optional">payload.headers
+  		<span class="property-type">object</span>
+  	</dt>
+  	<dd>response headers</dd>
 
-		<dt class="optional">payload.statusCode
-			<span class="property-type">integer</span>
-		</dt>
-		<dd>status code of response</dd>
-	</dl>
-	
-	<h3>Details</h3>
+  	<dt class="optional">payload.statusCode
+  		<span class="property-type">integer</span>
+  	</dt>
+  	<dd>status code of response</dd>
+  </dl>
 
+  <h3>Details</h3>
 </script>
-
-

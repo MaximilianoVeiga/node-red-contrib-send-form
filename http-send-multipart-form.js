@@ -13,18 +13,17 @@ var debug = false;
 module.exports = function (RED) {
 
 	function httpSendMultipart(n) {
-		// Setup node
 		RED.nodes.createNode(this, n);
 		var node = this;
 
-		this.ret = n.ret || "txt"; // default return type is text
+		this.ret = n.ret || "txt";
+
 		if (RED.settings.httpRequestTimeout) {
 			this.reqTimeout = parseInt(RED.settings.httpRequestTimeout) || 60000;
 		} else {
 			this.reqTimeout = 60000;
 		}
 
-		// 1) Process inputs to Node
 		this.on("input", async function (msg) {
 			try {
 				var nodeUrl = n.url;
@@ -50,7 +49,7 @@ module.exports = function (RED) {
 					shape: "dot",
 					text: "Sending multipart request..."
 				});
-				var url = nodeUrl; // TODO add ability to take this from the settings.js config file
+				var url = nodeUrl;
 
 				if (isTemplatedUrl) {
 					url = mustache.render(nodeUrl, msg);
@@ -66,9 +65,8 @@ module.exports = function (RED) {
 					return;
 				}
 
-				// Add auth if it exists
 				if (this.credentials && this.credentials.user) {
-					var urlTail = url.substring(url.indexOf('://') + 3); // hacky but it works. don't judge me
+					var urlTail = url.substring(url.indexOf('://') + 3);
 					var username = this.credentials.user,
 						password = this.credentials.password;
 					url = 'https://' + username + ':' + password + '@' + urlTail;
@@ -129,8 +127,8 @@ module.exports = function (RED) {
 				var formFileField = msg.payload.file.field;
 				if (debug) console.log('contentType ' + fileMime + ' filename ' + fileName);
 
-				formData.append(formFileField, buffer, { // 'photo'
-					'contentType': fileMime, //'image/png',
+				formData.append(formFileField, buffer, {
+					'contentType': fileMime,
 					'filename': fileName
 				});
 
@@ -169,7 +167,7 @@ module.exports = function (RED) {
 							shape: "ring",
 							text: error.message
 						});
-						
+
 						node.error(error);
 						console.log(error);
 					}
@@ -178,7 +176,6 @@ module.exports = function (RED) {
 					formData.submit(url,
 						function (err, res) {
 							if (err || !res) {
-								// node.error(RED._("httpSendMultipart.errors.no-url"), msg);
 								var statusText = "Unexpected error";
 								if (err) {
 									statusText = err.message;
@@ -190,13 +187,11 @@ module.exports = function (RED) {
 									shape: "ring",
 									text: statusText
 								});
-								
+
 								node.error(err);
-								// success
 							} else {
 								res.resume();
 
-								// get body of response object
 								let body = [];
 								res.on('data', (chunk) => {
 									if (debug) console.log(`BODY: ${chunk}`);
@@ -229,7 +224,6 @@ module.exports = function (RED) {
 										}
 										case 'obj': {
 
-											// check content-type
 											switch (res.headers["content-type"]) {
 												case 'application/json':
 												case 'application/json; charset=utf-8': {
@@ -253,7 +247,7 @@ module.exports = function (RED) {
 								});
 							}
 						});
-				} //else
+				}
 
 			} catch (error) {
 				node.status({
@@ -264,11 +258,10 @@ module.exports = function (RED) {
 				node.error(error);
 				console.log(error);
 			}
-		}); // end of on.input
-	} // end of httpSendMultipart fxn
+		});
+	}
 
-	// Register the Node
-	RED.nodes.registerType("http-send-multipart-form-v3", httpSendMultipart, {
+	RED.nodes.registerType("http-send-multipart-form-v4", httpSendMultipart, {
 		credentials: {
 			user: {
 				type: "text"
